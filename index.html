@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find the Right Solution | Tech Experts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#0B0F19', // Deep dark blue/black
+                        cardBg: 'rgba(17, 24, 39, 0.7)', // Glassy dark
+                        primary: '#00F0FF', // Cyan/Electric Blue accent
+                        primaryHover: '#00D1E0',
+                        secondaryText: '#9CA3AF'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles for Glassmorphism and Animations */
+        body {
+            background-color: #0B0F19;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 240, 255, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: #F3F4F6;
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom Input Styling */
+        .custom-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-input:focus {
+            outline: none;
+            border-color: #00F0FF;
+            box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .custom-input::placeholder {
+            color: #6B7280;
+        }
+
+        /* Select styling to ensure dropdown options are visible */
+        select.custom-input option {
+            background-color: #111827; /* Dark background for dropdown */
+            color: white;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #00F0FF;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hide the honeypot field completely from users */
+        .ohnohoney {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 0;
+            width: 0;
+            z-index: -1;
+        }
+        
+        /* Custom Checkbox */
+        .custom-checkbox {
+            appearance: none;
+            background-color: transparent;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 0.15em;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .custom-checkbox::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em #00F0FF;
+            background-color: #00F0FF;
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+
+        .custom-checkbox:checked {
+            border-color: #00F0FF;
+        }
+
+        .custom-checkbox:checked::before {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-sans">
+
+    <!-- Header / Navbar -->
+    <header class="fixed w-full top-0 z-50 glass-card border-b-0 border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <!-- Logo Icon -->
+                    <div class="w-8 h-8 rounded bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center">
+                        <i class="fa-solid fa-bolt text-white text-sm"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-white">Nexus<span class="text-primary">AI</span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-28 pb-12">
+        <!-- Hero Section -->
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-12 mb-20 fade-in">
+            <div class="inline-block mb-4 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium tracking-wide">
+                Next-Gen Solutions
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                Let's Find the <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">Right Solution</span> for You
+            </h1>
+            <p class="mt-4 text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Tell us what you need and our team will get back to you with the right solution for your needs and budget.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#contact-form" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-darkBg bg-primary hover:bg-primaryHover transition-all duration-300 shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transform hover:-translate-y-1">
+                    Get Started Now
+                    <i class="fa-solid fa-arrow-down ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div id="contact-form" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 scroll-mt-32">
+            <div class="glass-card rounded-2xl p-6 sm:p-10 relative overflow-hidden">
+                <!-- Decorative glow in the card -->
+                <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
+                
+                <h2 class="text-2xl font-bold text-white mb-2">Project Requirements</h2>
+                <p class="text-gray-400 mb-8 text-sm">Fill out the details below and our specialists will be in touch within 24 hours.</p>
+
+                <!-- Form Container -->
+                <form id="leadForm" class="space-y-6" onsubmit="submitForm(event)">
+                    
+                    <!-- HONEYPOT FIELD - Anti-spam measure -->
+                    <!-- Real users won't see this, but bots will fill it out. If it's filled, we reject the submission silently. -->
+                    <div class="ohnohoney">
+                        <label for="website_url_trap">Website URL</label>
+                        <input type="text" id="website_url_trap" name="website_url_trap" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <!-- Personal Info Grid -->
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <!-- Full Name -->
+                        <div>
+                            <label for="fullName" class="block text-sm font-medium text-gray-300 mb-2">Full Name <span class="text-red-400">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-regular fa-user text-gray-500"></i>
+                                </div>
+                                <input type="text" name="fullName" id="fullName" required
+                                    class="custom-input block w-full pl-10 pr-3 py-3 rounded-lg text-sm sm:text-base"
+                                    placeholder="Jane Doe">
+                            </div>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-300 mb-2">Phone Number <span class="text-red-400">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-phone text-gray-500 text-sm"></i>
+                                </div>
+                                <input type="tel" name="phone" id="phone" required
+                                    class="custom-input block w-full pl-10 pr-3 py-3 rounded-lg text-sm sm:text-base"
+                                    placeholder="+44 7700 900077">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Work Email <span class="text-red-400">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-regular fa-envelope text-gray-500"></i>
+                                </div>
+                                <input type="email" name="email" id="email" required
+                                    class="custom-input block w-full pl-10 pr-3 py-3 rounded-lg text-sm sm:text-base"
+                                    placeholder="jane@company.com">
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div>
+                            <label for="location" class="block text-sm font-medium text-gray-300 mb-2">Location (City/Country) <span class="text-red-400">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-location-dot text-gray-500"></i>
+                                </div>
+                                <input type="text" name="location" id="location" required
+                                    class="custom-input block w-full pl-10 pr-3 py-3 rounded-lg text-sm sm:text-base"
+                                    placeholder="London, UK">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service Required -->
+                    <div>
+                        <label for="service" class="block text-sm font-medium text-gray-300 mb-2">Primary Service Required <span class="text-red-400">*</span></label>
+                        <div class="relative">
+                            <select id="service" name="service" required class="custom-input block w-full pl-3 pr-10 py-3 rounded-lg text-sm sm:text-base appearance-none cursor-pointer">
+                                <option value="" disabled selected>Select a service...</option>
+                                <option value="AI Training">AI Training for Teams</option>
+                                <option value="AI Consultation">Strategic AI Consultation</option>
+                                <option value="Website Development">Website Development</option>
+                                <option value="App Development">Mobile/Web App Development</option>
+                                <option value="AI Automation">Workflow AI Automation</option>
+                                <option value="Chatbot">Custom Chatbot Development</option>
+                                <option value="Voice Agent">AI Voice Agent</option>
+                                <option value="Other">Other (Specify in message)</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                                <i class="fa-solid fa-chevron-down text-gray-500 text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Budget -->
+                    <div>
+                        <label for="budget" class="block text-sm font-medium text-gray-300 mb-2">Estimated Budget (GBP) <span class="text-red-400">*</span></label>
+                        <div class="relative">
+                            <select id="budget" name="budget" required class="custom-input block w-full pl-3 pr-10 py-3 rounded-lg text-sm sm:text-base appearance-none cursor-pointer">
+                                <option value="" disabled selected>Select your budget range...</option>
+                                <option value="< £1,000">Under £1,000</option>
+                                <option value="£1,000 - £5,000">£1,000 - £5,000</option>
+                                <option value="£5,000 - £10,000">£5,000 - £10,000</option>
+                                <option value="£10,000 - £25,000">£10,000 - £25,000</option>
+                                <option value="£25,000+">£25,000+</option>
+                                <option value="To be determined">To be determined</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                                <i class="fa-solid fa-chevron-down text-gray-500 text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message -->
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-300 mb-2">Additional Details (Optional)</label>
+                        <textarea id="message" name="message" rows="4" 
+                            class="custom-input block w-full p-3 rounded-lg text-sm sm:text-base resize-y"
+                            placeholder="Tell us a bit more about your project goals or specific requirements..."></textarea>
+                    </div>
+
+                    <!-- Consent Checkbox -->
+                    <div class="flex items-start mt-6">
+                        <div class="flex items-center h-5">
+                            <input id="consent" name="consent" type="checkbox" required class="custom-checkbox">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="consent" class="font-medium text-gray-300 cursor-pointer">I consent to processing</label>
+                            <p class="text-gray-500 text-xs mt-1">I agree to be contacted regarding my inquiry and understand my data will be handled according to the privacy policy.</p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Area -->
+                    <div class="pt-4">
+                        <button type="submit" id="submitBtn" class="w-full sm:w-auto min-w-[200px] flex justify-center items-center py-3.5 px-6 border border-transparent rounded-lg shadow-sm text-base font-medium text-darkBg bg-primary hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-darkBg transition-all duration-200">
+                            <span id="btnText">Submit Request</span>
+                            <div id="btnSpinner" class="spinner ml-3 hidden"></div>
+                        </button>
+                    </div>
+
+                    <!-- Feedback Messages -->
+                    <div id="formSuccess" class="hidden rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-4 mt-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-emerald-400">
+                                    Request submitted successfully! Our team will be in touch shortly.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="formError" class="hidden rounded-lg bg-red-500/10 border border-red-500/20 p-4 mt-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fa-solid fa-circle-exclamation text-red-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-red-400" id="errorMessage">
+                                    There was an error submitting your request. Please try again or contact us directly.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-black/20 mt-auto">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">
+                &copy; <span id="year"></span> NexusAI Solutions. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // =========================================================================
+        // 🔴 INSTRUCTIONS FOR NON-TECHNICAL BUILDER 🔴
+        // =========================================================================
+        // 1. Go to your N8N dashboard.
+        // 2. Create a new Workflow and add a "Webhook" node as the trigger.
+        // 3. Set the Webhook Method to "POST".
+        // 4. Double click the Webhook node, copy the "Production URL".
+        // 5. PASTE THAT URL BELOW, replacing "YOUR_N8N_WEBHOOK_URL_HERE".
+        // Make sure it stays wrapped in the single quotes!
+        // =========================================================================
+        
+        const N8N_WEBHOOK_URL = 'https://rockit2021.app.n8n.cloud/webhook/15e54cbf-fce1-4977-b7ee-84ae53234793'; // <-- PASTE URL HERE
+        
+        // Example of what it should look like: 
+        // const N8N_WEBHOOK_URL = 'https://n8n.yourdomain.com/webhook/1234-abcd-5678';
+        // =========================================================================
+
+        async function submitForm(event) {
+            // Prevent the default form submission (page reload)
+            event.preventDefault();
+
+            const form = document.getElementById('leadForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const successMsg = document.getElementById('formSuccess');
+            const errorMsg = document.getElementById('formError');
+            const errorMessageEl = document.getElementById('errorMessage');
+
+            // 1. Anti-Spam Honeypot Check
+            const honeypot = document.getElementById('website_url_trap').value;
+            if (honeypot !== "") {
+                // If bot filled out the hidden field, pretend it was successful but do nothing
+                console.log("Spam detected and blocked.");
+                form.reset();
+                successMsg.classList.remove('hidden');
+                return;
+            }
+
+            // 2. Check if webhook URL is configured
+            if (N8N_WEBHOOK_URL === 'YOUR_N8N_WEBHOOK_URL_HERE') {
+                errorMsg.classList.remove('hidden');
+                errorMessageEl.textContent = "Configuration Error: Webhook URL not set. Please add your n8n URL to the code.";
+                return;
+            }
+
+            // 3. Set Loading State (Prevent Double Submit)
+            // Disable button, change text, show spinner
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+            btnText.textContent = "Submitting...";
+            btnSpinner.classList.remove('hidden');
+            
+            // Hide previous messages
+            successMsg.classList.add('hidden');
+            errorMsg.classList.add('hidden');
+
+            // 4. Gather Form Data
+            const formData = new FormData(form);
+            
+            // Construct the JSON payload
+            const payload = {
+                timestamp: new Date().toISOString(),
+                source: "Website Lead Form",
+                contact: {
+                    fullName: formData.get('fullName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    location: formData.get('location')
+                },
+                projectDetails: {
+                    serviceRequired: formData.get('service'),
+                    budgetRange: formData.get('budget'),
+                    message: formData.get('message') || "No additional details provided.",
+                },
+                consentGiven: formData.get('consent') === 'on'
+            };
+
+            // 5. Send POST Request to N8N Webhook
+            try {
+                const response = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                // 6. Handle Response
+                if (response.ok) {
+                    // Success!
+                    form.reset(); // Clear the form
+                    successMsg.classList.remove('hidden');
+                    
+                    // Optional: Scroll to success message so mobile users see it
+                    successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    // Server responded, but with an error status (e.g., 404, 500)
+                    throw new Error(`Server returned status: ${response.status}`);
+                }
+            } catch (error) {
+                // Network error or fetch failed (CORS, wrong URL, offline)
+                console.error('Submission Error:', error);
+                errorMsg.classList.remove('hidden');
+                errorMessageEl.textContent = "Unable to connect to the server. Please check your internet connection or try again later.";
+            } finally {
+                // 7. Reset Loading State (Regardless of success or failure)
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnText.textContent = "Submit Request";
+                btnSpinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
